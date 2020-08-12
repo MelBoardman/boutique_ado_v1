@@ -46,17 +46,13 @@ card.addEventListener('change', function (event) {
 // Handle form submit
 var form = document.getElementById('payment-form');
 
-// User clicks submit button
 form.addEventListener('submit', function(ev) {
-    // prevent the form from submitting
     ev.preventDefault();
-    // Disable card element and trigger the loading overlay   
     card.update({ 'disabled': true});
     $('#submit-button').attr('disabled', true);
     $('#payment-form').fadeToggle(100);
     $('#loading-overlay').fadeToggle(100);
 
-    //create variables to capture the form data that we cant put in the payment intent    
     var saveInfo = Boolean($('#id-save-info').attr('checked'));
     // From using {% csrf_token %} in the form
     var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
@@ -67,9 +63,7 @@ form.addEventListener('submit', function(ev) {
     };
     var url = '/checkout/cache_checkout_data/';
 
-    // the view updates the payment intent and returns a 200 response 
     $.post(url, postData).done(function () {
-        // call the confirm payment method from stripe and submit the form
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: card,
