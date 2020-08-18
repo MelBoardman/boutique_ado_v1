@@ -3,6 +3,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from products.models import Product
 
+
 def bag_contents(request):
 
     bag_items = []
@@ -11,7 +12,7 @@ def bag_contents(request):
     bag = request.session.get('bag', {})
 
     for item_id, item_data in bag.items():
-        if isinstance(item_data,int): # if its an int we know its a quantity
+        if isinstance(item_data, int):   # if its an int we know its a quantity
             product = get_object_or_404(Product, pk=item_id)
             total += item_data * product.price
             product_count += item_data
@@ -31,11 +32,6 @@ def bag_contents(request):
                     'product': product,
                     'size': size,
                 })
-
-
-
-
-
     if total < settings.FREE_DELIVERY_THRESHOLD:
         delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE/100)
         free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
@@ -55,4 +51,4 @@ def bag_contents(request):
         'grand_total': grand_total,
     }
 
-    return context 
+    return context
